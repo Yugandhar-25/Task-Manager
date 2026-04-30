@@ -7,6 +7,7 @@ namespace Task_Manager_API.Persistence
     public class TaskDbContext(DbContextOptions<TaskDbContext> options): DbContext(options)
     {
         public DbSet<TaskItem> Tasks { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
