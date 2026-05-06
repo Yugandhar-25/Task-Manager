@@ -8,6 +8,7 @@ using System.Text;
 using Task_Manager_API.Handlers;
 using Task_Manager_API.Models;
 using Task_Manager_API.Persistence;
+using Task_Manager_API.Repositories;
 using Task_Manager_API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +27,6 @@ Log.Logger = new LoggerConfiguration()
                 ).CreateLogger();
 
 builder.Host.UseSerilog();
-
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -40,6 +40,7 @@ builder.Services.AddDbContext<TaskDbContext>(options =>
 
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
