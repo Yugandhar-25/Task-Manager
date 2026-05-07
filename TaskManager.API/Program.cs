@@ -87,4 +87,9 @@ app.MapControllers();
 
 app.UseSerilogRequestLogging();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<TaskDbContext>();
+    db.Database.Migrate();
+}
 app.Run();

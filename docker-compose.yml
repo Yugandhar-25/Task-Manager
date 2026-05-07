@@ -1,0 +1,29 @@
+services:
+  api:
+    build: .
+    container_name: task-manager-api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=TaskDb;User Id=sa;Password=Your_Password123;TrustServerCertificate=True;
+      - JwtSettings__SecretKey=tYxTa3AFzX5p6yEL6zUGTQoJaxAV2n4a1k6sPYOYMD2
+      - JwtSettings__Issuer=TaskManagerAPI
+      - JwtSettings__Audience=TaskManagerClient
+      - JwtSettings__ExpiryMinutes=60
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: task-manager-db
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_Password123
+    ports:
+      - "1434:1433"
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "Your_Password123", "-Q", "SELECT 1", "-C"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
